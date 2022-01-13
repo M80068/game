@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加強版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            background-color: rgb(240, 96, 96);
+            width: 100%;
+            height: 100vh;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 520px;
+            height: 520px;
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #ddd;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        .box {
+            width: 50%;
+            height: 50%;
+            border-radius: 10px;
+            border: 5px solid white;
+            background-color: crimson;
+        }
+        
+        .box.active {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container">
+    </div>
+
+    <script>
+        let level = 0; //遊戲等級
+        let quantity = level + 2; //方塊單邊個數
+        let times = [1, 1, 1, 2, 3, 4, 5, 6]; //每個等級遊玩次數
+        let count = 1;
+
+        const containerElement = document.querySelector('.container');
+
+        //建立方塊
+        function createBox() {
+            let boxQty = quantity ** 2;
+            let answer = Math.floor(Math.random() * boxQty);
+            let boxes = '';
+
+            let r = Math.floor(Math.random() * 210);
+            let g = Math.floor(Math.random() * 210);
+            let b = Math.floor(Math.random() * 210);
+            let length = Math.floor(1 / quantity * 1000) / 10;
+
+            // 利用level作為單邊個數，計算box數量
+            for (let i = 0; i < boxQty; i++) {
+                if (i == answer) {
+                    let style = `style="background-color:rgb(${r},${g},${b}); width:${length}%; height:${length}%; opacity:${1-1/quantity};"`;
+                    boxes += `<div class="box active" ${style}></div>`;
+                } else {
+                    let style = `style="background-color:rgb(${r},${g},${b}); width:${length}%; height:${length}%;"`;
+                    boxes += `<div class="box" ${style}></div>`;
+                }
+            }
+            containerElement.innerHTML = boxes;
+        }
+
+        // 綁定答案功能
+        function answerSetting() {
+            const answerElement = document.querySelector('.box.active');
+            answerElement.addEventListener('click', function() {
+                //更新等級 當點及次數(count)大於 陣列設定關卡次數(time)時 難度(方塊)提升
+                if (count >= times[level]) {
+                    if (level < 7) {
+                        level += 1;
+                        quantity += 1;
+                    }
+                    count = 1;
+                } else {
+                    count += 1;
+                }
+                // 更新畫面
+                console.log(`level:${level},count:${count}`);
+                updateContainer();
+            });
+        }
+        // 更新畫面
+        function updateContainer() {
+            createBox();
+            answerSetting();
+        }
+        // 初始化遊戲
+        function initGame() {
+            level = 0;
+            quantity = level + 2;
+            count = 1;
+            console.log(`level:${level},count:${count}`);
+            updateContainer();
+        }
+        initGame();
+    </script>
+</body>
+
+</html>

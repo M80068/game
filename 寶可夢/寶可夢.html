@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .container {
+        margin: 0;
+        width: 1100px;
+        height: 600px;
+        background-image: url(./images.jpg);
+        background-size: cover;
+        position: relative;
+    }
+    
+    button {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .ai,
+    .player {
+        width: 200px;
+        height: 150px;
+    }
+    
+    .ai {
+        float: right;
+        padding: 300px 250px 0 0;
+    }
+    
+    .player {
+        padding: 470px 0 0 450px;
+        left: 0%;
+        bottom: 0%;
+    }
+    
+    .player img {
+        transform: rotateY(180deg);
+    }
+    
+    .vs0,
+    .vs1,
+    .vs2 {
+        background-size: cover;
+        width: 100px;
+        height: 100px;
+    }
+    
+    .vs0 {
+        background-image: url(./vs0.png);
+    }
+    
+    .vs1 {
+        background-image: url(./vs1.png);
+    }
+    
+    .vs2 {
+        background-image: url(./vs2.png);
+    }
+    
+    .result {
+        width: 250px;
+        height: 100px;
+        margin-right: 40px;
+        background-color: rgb(224, 229, 236);
+        box-shadow: rgba(92, 151, 90, 0.5) 12px 12px 24px 0px, rgb(255, 255, 255) -12px -12px 24px 0px;
+        -webkit-box-shadow: rgba(70, 95, 80, 0.5) 12px 12px 24px 0px, rgb(255, 255, 255) -12px -12px 24px 0px;
+        border-radius: 20px;
+        -webkit-border-radius: 40px;
+        font-size: 20px;
+        float: left;
+        clear: left;
+        text-align: center;
+        line-height: 100px
+    }
+</style>
+
+<body>
+    <div class="container">
+
+        <div class="ai">
+            <span>電腦:</span>
+            <img id="ai" width="100px" src="./ball.jpg.png" alt="">
+        </div>
+        <div class="player">
+            <span>玩家:</span>
+            <img id="player" width="100px" src="./ball.jpg.png" alt="">
+        </div>
+        <div class="result"><span id="result">請出角色</span></div>
+        <div>
+            <button class="vs vs0" deta-vs="0"></button>
+            <button class="vs vs1" deta-vs="1"></button>
+            <button class="vs vs2" deta-vs="2"></button>
+        </div>
+    </div>
+
+    <script>
+        //把所有元素抓出來
+        const aiElement = document.querySelector('#ai')
+        const playerElement = document.querySelector('#player')
+        const resultElement = document.querySelector('#result')
+            //一口氣把三個按鈕都抓出來 所以有all
+        const vsElements = document.querySelectorAll('.vs')
+
+        // 把每一個選項輪替拿出來
+        vsElements.forEach(function(vsElement) {
+
+            // 個別綁定監聽按鈕
+            vsElement.addEventListener('click', function() {
+
+                let player = vsElement.getAttribute('deta-vs');
+
+                //運用 random取亂數 (0~x之間 含0,不含x數) 然後floor去除小數點後\
+                // 隨機一個電腦的值(1、2、3)
+                // Math.random() 0-1 介於0到1之間(包含 0，不包含1) 
+                // Math.random()*3 0-3 介於0到3之間(包含 0，不包含3)
+                let ai = Math.floor(Math.random() * 3) //產生 0.1.2三個數字
+
+                console.log(player, ai);
+                //把結果設空格  依最後結果顯示再填入
+                let result = '';
+
+                //把所有平手挑出來
+                if (player == ai) {
+                    result = '平手';
+                } else if (player == 1 && ai == 2 || player == 2 && ai == 0 || player == 0 && ai == 1) {
+                    result = '電腦獲勝';
+                } else {
+                    result = '玩家獲勝';
+                }
+
+                //顯示結果 改變圖片屬性  用替換字句 取代圖片名稱
+                aiElement.setAttribute('src', `./vs${ai}.png`);
+                playerElement.setAttribute('src', `./vs${player}.png`);
+                //填入結果
+                resultElement.textContent = result;
+
+            })
+        });
+    </script>
+
+</body>
+
+</html>
